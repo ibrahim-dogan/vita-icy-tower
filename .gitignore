@@ -1,0 +1,24 @@
+# build outputs
+build/
+build-*/
+dist/
+target/
+*.vpk
+*.velf
+*.self
+eboot.bin
+*.log
+log.txt
+
+# local test output
+/shots/
+
+# The original game's files are copyrighted: never commit them.
+gamedata/
+original/
+*.dat
+*.itr
+*.cfg
+
+.DS_Store
+__pycache__/

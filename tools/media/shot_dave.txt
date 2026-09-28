@@ -1,0 +1,5 @@
+# Disco Dave (character from the original game) climbing.
+wait 30
+press CROSS
+wait 740
+dshot /out/dave.png

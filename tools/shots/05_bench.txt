@@ -1,0 +1,13 @@
+# Watch a combo heavy replay (lots of stars and rewards) for the benchmark.
+wait 30
+press DOWN
+press CROSS
+wait 40
+press CROSS
+wait 5
+press DOWN
+press DOWN
+press DOWN
+press DOWN
+press CROSS
+wait 7000

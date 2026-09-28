@@ -1,0 +1,7 @@
+# Arnon Yaari's 12648 replay around the AMAZING at game tick 1498.
+wait 30
+press CROSS
+wait 1300
+record /out/clip_amazing.raw
+wait 400
+record off

@@ -1,0 +1,6 @@
+# Host tooling: headless Linux build of the game for tests and screenshots.
+FROM debian:bookworm-slim
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      gcc make cmake libsdl2-dev python3 python3-pil ca-certificates innoextract fonts-dejavu-core ffmpeg pngquant gifsicle \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /work

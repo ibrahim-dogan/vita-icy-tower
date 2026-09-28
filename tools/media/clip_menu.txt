@@ -1,0 +1,4 @@
+wait 120
+record /out/clip_menu.raw
+wait 200
+record off

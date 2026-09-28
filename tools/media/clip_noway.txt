@@ -1,0 +1,7 @@
+# Arnon Yaari's 61719 replay: the end of the 237 floor combo.
+wait 30
+press CROSS
+wait 3940
+record /out/clip_noway.raw
+wait 380
+record off

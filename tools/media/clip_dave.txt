@@ -1,0 +1,7 @@
+# Disco Dave, Johan Peitz's 5760 replay around the SUPER at game tick 686.
+wait 30
+press CROSS
+wait 480
+record /out/clip_dave.raw
+wait 320
+record off

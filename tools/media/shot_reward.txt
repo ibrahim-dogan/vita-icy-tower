@@ -1,0 +1,5 @@
+# Arnon Yaari's 61719 replay: the 237 floor combo ends at game tick 4174.
+wait 30
+press CROSS
+wait 4228
+dshot /out/reward.png
