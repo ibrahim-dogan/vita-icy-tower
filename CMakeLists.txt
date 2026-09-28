@@ -14,8 +14,11 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 file(GLOB SOURCES ${CMAKE_SOURCE_DIR}/src/*.c)
-add_executable(icytower ${SOURCES})
-target_include_directories(icytower PRIVATE src third_party third_party/stb)
+# LZMA SDK decoder (public domain), for unpacking the original installer
+set(LZMA_SOURCES ${CMAKE_SOURCE_DIR}/third_party/lzma/LzmaDec.c)
+set_source_files_properties(${LZMA_SOURCES} PROPERTIES COMPILE_OPTIONS "-w")
+add_executable(icytower ${SOURCES} ${LZMA_SOURCES})
+target_include_directories(icytower PRIVATE src third_party third_party/stb third_party/lzma)
 # -ffp-contract=off: no fused multiply-add, the engine must round like the
 # original so replays stay in sync.
 target_compile_options(icytower PRIVATE -Wall -Wextra -Wno-unused-function -Wno-missing-field-initializers -Wno-format-truncation

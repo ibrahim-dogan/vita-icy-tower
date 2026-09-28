@@ -9,7 +9,7 @@
 #define GAME_HZ 50
 #define VERSION_STRING "v1.3.1"
 /* Version of this port (release tags are v<PORT_VERSION>). */
-#define PORT_VERSION "1.0.0"
+#define PORT_VERSION "1.0.1"
 
 typedef enum {
     SC_ERROR,

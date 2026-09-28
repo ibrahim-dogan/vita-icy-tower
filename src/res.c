@@ -324,9 +324,23 @@ void res_select_character(int i)
     build_maps();
 }
 
+void res_init_basic(void)
+{
+    if (!R.font8) R.font8 = font_from_8x8((const unsigned char(*)[8])font8x8_basic);
+    /* a tiny palette for the screens shown before the game data is loaded */
+    memset(R.pal, 0, sizeof(R.pal));
+    R.pal[1].r = R.pal[1].g = R.pal[1].b = 255;
+    R.pal[2].r = 255;
+    R.pal[2].g = R.pal[2].b = 90;
+    R.pal[3].r = 70;
+    R.pal[3].g = 140;
+    R.pal[3].b = 255;
+    R.pal[4].r = R.pal[4].g = R.pal[4].b = 60;
+}
+
 int res_load(char *err, int errlen)
 {
-    R.font8 = font_from_8x8((const unsigned char(*)[8])font8x8_basic);
+    res_init_basic();
 
     Datafile gfx;
     if (dat_load(&gfx, game_path("data/data.dat"), GFX_PASSWORD) != 0) {

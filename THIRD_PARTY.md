@@ -45,6 +45,8 @@ https://ramensoftware.com/revealing-the-secrets-of-icy-tower-v1-3-1
 src/datafile.c (datafile encryption and LZSS) and pal_make_light() in src/gfx.c
 re-implement algorithms of the Allegro 4 game library (giftware license).
 
+## LZMA SDK decoder by Igor Pavlov (public domain), third_party/lzma/
+
 ## stb_vorbis (public domain / MIT), third_party/stb/
 
 ## font8x8 (public domain), third_party/font8x8_basic.h

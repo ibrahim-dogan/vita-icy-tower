@@ -31,50 +31,48 @@ Made by **İbrahim Doğan**
 ## Installation
 
 You need a PS Vita (or PS TV) running HENkaku / Ensō and [VitaShell](https://github.com/TheOfficialFloW/VitaShell).
-You also need a PC (Windows, macOS or Linux) once, to get the game files.
 
 The VPK contains **none of Icy Tower's graphics, sounds or music**. They belong to Free Lunch
-Design, so the port reads them from your own copy of the free PC game.
+Design, so the port takes them from the original, unmodified installer of the free PC game, which
+you copy to the Vita once.
 
 1. Download **`icytower.vpk`** from the [latest release](https://github.com/ibrahim-dogan/vita-icy-tower/releases/latest), copy it to the Vita and install it with VitaShell.
-2. Get **Icy Tower 1.3.1**, which is freeware. The original installer `icytower13_install.exe` is on
-   [archive.org](https://archive.org/details/Icy_Tower) (SHA-1 `a00aa6ebc4c37fac7c44de91671477ef7e32389a`).
-3. Get the game files out of it:
-   - **Windows:** run the installer, then open the installed folder (usually `C:\Program Files\Icy Tower 1.3`).
-   - **macOS / Linux:** run `tools/prepare_data.sh icytower13_install.exe` from this repository. It uses
-     [innoextract](https://constexpr.org/innoextract/), or Docker if innoextract is not installed. The files
-     end up in a folder named `icytower/`.
-4. Copy `data/`, `characters/` and (optionally) `replays/` to **`ux0:data/icytower/`** on the Vita, for example
-   with VitaShell's FTP or USB mode.
-5. Start **Icy Tower** from the LiveArea.
+2. Download the free **Icy Tower 1.3.1** installer, **`icytower13_install.exe`**, from
+   [archive.org](https://archive.org/details/Icy_Tower). It is inside `icytower13.rar` there, and the
+   [direct link](https://archive.org/download/Icy_Tower/icytower13.rar/icytower13_install.exe) gets you the exe.
+3. Copy the exe to **`ux0:data/icytower/`** on the Vita, e.g. with VitaShell's FTP or USB mode. Create the folder if needed.
+4. Start **Icy Tower** from the LiveArea. On the first start it unpacks the game files from the installer
+   (a progress bar is shown for a moment), then it goes to the title screen.
 
-The folder must look like this:
+After the first start the folder looks like this:
 
 ```
 ux0:data/icytower/
+├── icytower13_install.exe  the installer you copied (you can delete it now)
 ├── data/
-│   ├── data.dat           graphics and fonts
-│   └── sfx13.dat          sounds and music
+│   ├── data.dat            graphics and fonts
+│   └── sfx13.dat           sounds and music
 ├── characters/
 │   ├── harold_the_homeboy/
-│   │   ├── harold_the_homeboy.txt
-│   │   └── harold.dat
 │   ├── disco_dave/
 │   └── template/
-├── replays/               optional: the example replays, and where yours are saved
-└── sfx/                   optional: your own sounds (good.wav, bg_beat.wav …)
+├── replays/                the example replays, and where yours are saved
+├── readme.txt              the original game's manual
+├── icytower_vita.cfg       options, unlocked floors, highscores
+└── log.txt
 ```
-
-The game creates `icytower_vita.cfg` (options, unlocked floors, highscores) and `log.txt` there.
 
 **Gotchas**
 
-- The files must come from **version 1.3.1**. The files of other versions (1.4, 1.5 …) have not been tested.
-- Copy the files directly into `ux0:data/icytower/`, and not into a subfolder like
-  `ux0:data/icytower/Icy Tower 1.3/`. `ux0:data/icytower/data/data.dat` must exist.
-- Copy the whole `characters/` folder. At least one character (normally Harold) is required.
-- If the files are not found, the game shows a screen that lists what is missing.
-- Please don't upload the game files together with the VPK. Everyone should get them from the original release.
+- The installer must be the original **1.3.1** one: 2,647,172 bytes, SHA-1
+  `a00aa6ebc4c37fac7c44de91671477ef7e32389a`. The game checks this, and other versions (1.4, 1.5 …) are not supported.
+- The exe goes directly into `ux0:data/icytower/`, and not into a subfolder.
+- Unpacking never overwrites files that are already there. To unpack again, delete `data/`.
+- **No installer at hand?** You can also copy `data/`, `characters/` and (optionally) `replays/` from an
+  installed PC copy (usually `C:\Program Files\Icy Tower 1.3`) into `ux0:data/icytower/`, or run
+  `tools/prepare_data.sh icytower13_install.exe` from this repository on macOS / Linux.
+- If the files are not found, the game shows a screen that says what is missing.
+- Please don't upload the unpacked game files. Point people to the original installer instead.
 
 ## Controls
 
@@ -133,14 +131,16 @@ Hidden: hold **L + R** and press **Select** to show the frame rate.
   - **Wide:** stretched to 16:9.
   - **1:1:** the original 640×480, unscaled.
 - Sound and music volume, and the ReJump setting.
+- **Unpacks the original installer by itself** on the first start. The installer is checked by SHA-1 first.
 
 ## Compatibility and troubleshooting
 
 - This is the first release. It was developed and tested mostly with the desktop build, and the
   Vita build has had only a little testing on real hardware so far. Please report anything that
   looks or plays differently from the PC version.
-- **Missing files screen:** check the folder tree above. In particular, `ux0:data/icytower/data/data.dat`
-  must exist.
+- **Missing files screen:** check that `icytower13_install.exe` is directly in `ux0:data/icytower/`. If you
+  copied the files by hand, `ux0:data/icytower/data/data.dat` must exist. The last line on the screen and
+  the log say what went wrong, e.g. "The .exe found is not the 1.3.1 installer".
 - **A character is missing from the list:** its folder name and its `.txt` file must match
   (`jolly_joe/jolly_joe.txt`), and it needs all 15 frames. The log says why a character was skipped.
 - **The picture looks wrong:** try another screen mode under *Options → GFX Options → Screen*.
@@ -164,8 +164,8 @@ Everything builds in Docker:
 ./build.sh media     # the screenshots and trailer in docs/media
 ```
 
-`test` and `media` need the original game files in `./gamedata`
-(`tools/prepare_data.sh icytower13_install.exe gamedata`). The desktop build is the same game with SDL2.
+`test` and `media` need the original game files in `./gamedata`. Copy `icytower13_install.exe` there and run
+the desktop build once, or use `tools/prepare_data.sh icytower13_install.exe gamedata`. The desktop build is the same game with SDL2.
 Only the desktop build contains the scripting, recording and autoplay hooks for these tools.
 
 | Path | What it is |
@@ -176,6 +176,7 @@ Only the desktop build contains the scripting, recording and autoplay hooks for 
 | `src/menu.c`, `src/screens.c` | Title screen, options, highscores, replay menus and browser |
 | `src/datafile.c` | Allegro 4 datafile reader (encryption, LZSS) |
 | `src/res.c` | Loading data, characters and custom sounds from `ux0:data/icytower` |
+| `src/installer.c` | Unpacking the files from the original 1.3.1 installer (Inno Setup, LZMA) |
 | `src/gfx.c`, `src/font.c` | 8-bit software renderer and Allegro fonts |
 | `src/video.c` | Vita: vita2d with a paletted texture. Desktop: SDL2 |
 | `src/audio.c` | Mixer with OGG/WAV decoding |
@@ -192,6 +193,7 @@ Only the desktop build contains the scripting, recording and autoplay hooks for 
 - [icytower-ng](https://github.com/royeldar/icytower-ng) by royeldar (MIT). The presentation logic follows its
   reconstruction of 1.3.1: animations, eye candy, the effects random generator and the tower wall generator.
 - [Allegro 4](https://liballeg.org). Its datafile, LZSS and light table algorithms are re-implemented here (giftware license).
+- [LZMA SDK](https://www.7-zip.org/sdk.html) by Igor Pavlov (public domain), used to unpack the installer.
 - [stb_vorbis](https://github.com/nothings/stb) and stb_image_write (public domain),
   [font8x8](https://github.com/dhepper/font8x8) (public domain),
   [SDL2](https://www.libsdl.org), [vita2d](https://github.com/xerpi/libvita2d), [VitaSDK](https://vitasdk.org).

@@ -10,6 +10,7 @@
 #include "rnd.h"
 #include "video.h"
 #include "log.h"
+#include "installer.h"
 
 #ifndef __vita__
 #include "stb_image_write.h"
@@ -116,6 +117,39 @@ static void draw_perf(void)
     text_draw(g_screen, R.font8, g_perf_text, 6, 6, pal_nearest(R.pal, 255, 255, 255), ALIGN_LEFT);
 }
 
+/* ---- first start: unpack the original installer ---- */
+
+static void draw_unpack(int done, int total)
+{
+    res_init_basic();
+    bmp_clear(g_screen, 0);
+    text_draw(g_screen, R.font8, "ICY TOWER for PS Vita", 64, 120, 1, ALIGN_LEFT);
+    text_draw(g_screen, R.font8, "Unpacking the Icy Tower 1.3.1 installer...", 64, 160, 1, ALIGN_LEFT);
+    gfx_fill(g_screen, 64, 200, 512, 16, 4);
+    gfx_fill(g_screen, 64, 200, total ? 512 * done / total : 0, 16, 3);
+    video_present(g_screen, R.pal, 0, 0, cfg.screen);
+}
+
+static char g_unpack_error[256];
+
+static void unpack_installer_if_needed(void)
+{
+    FILE *f = fopen(game_path("data/data.dat"), "rb");
+    if (f) {
+        fclose(f);
+        return;
+    }
+    char exe[512];
+    int found = installer_find(exe, sizeof(exe));
+    if (found == INSTALLER_UNKNOWN) {
+        log_printf("*** an .exe was found in %s, but it is not icytower13_install.exe of version 1.3.1", game_root());
+        snprintf(g_unpack_error, sizeof(g_unpack_error), "The .exe found is not the 1.3.1 installer.");
+        return;
+    }
+    if (found != INSTALLER_OK) return;
+    if (installer_extract(exe, draw_unpack, g_unpack_error, sizeof(g_unpack_error)) == 0) g_unpack_error[0] = 0;
+}
+
 int main(int argc, char **argv)
 {
     (void)argc;
@@ -150,12 +184,11 @@ int main(int argc, char **argv)
     rnd_msvc();
     rnd_seed_custom(rnd_msvc() % 2367);
 
+    unpack_installer_if_needed();
     if (res_load(app.error, sizeof(app.error)) != 0) {
         log_printf("*** %s", app.error);
-        memset(R.pal, 0, sizeof(R.pal));
-        R.pal[1].r = R.pal[1].g = R.pal[1].b = 255;
-        R.pal[2].r = 255;
-        R.pal[2].g = R.pal[2].b = 90;
+        if (g_unpack_error[0]) snprintf(app.error, sizeof(app.error), "%s", g_unpack_error);
+        res_init_basic();
         app_goto(SC_ERROR, 0);
     } else {
         int c = res_find_character(cfg.character);

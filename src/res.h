@@ -80,6 +80,9 @@ typedef struct {
 
 extern Res R;
 
+/* The 8x8 font and a basic palette (indices 1 white, 2 red, 3 blue,
+ * 4 grey) for screens shown before the game data is there. */
+void res_init_basic(void);
 /* Loads everything. Returns 0 or fills err with a message. */
 int res_load(char *err, int errlen);
 Bitmap *res_bmp(const char *name);

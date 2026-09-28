@@ -17,6 +17,16 @@ after `upx -d`.
 | `characters/*/harold.dat` | plain datafile: `000_PAL`, `001_BMP`..`015_BMP` frames, `016`..`023` OGG sounds |
 | `replays/*.itr` | ITR130 replays |
 
+### Unpacking the installer on the Vita
+
+The installer is **Inno Setup 5.1.2**. Every file is stored as its own chunk (no solid
+compression): `zlb\x1a`, five bytes of LZMA properties, then a raw LZMA stream. None of the
+chunks we need use the call-instruction filter (only the exe does). `src/installer.c` checks
+the installer's size and SHA-1, and then decodes the chunks at fixed offsets with the LZMA SDK.
+The offset table was made by matching every chunk against innoextract's output. That is simpler
+than parsing Inno's version-specific setup header, and correct because only this one file is
+accepted.
+
 ### Allegro 4 datafile
 
 - The new style encryption XORs **every byte of the file, the magic number included**,
